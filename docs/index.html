@@ -447,6 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_tree">1. Tree</a>
 <ul class="sectlevel2">
 <li><a href="#_fehlermeldungen">1.1. Fehlermeldungen</a></li>
+<li><a href="#_wawi">1.2. WAWI</a></li>
 </ul>
 </li>
 </ul>
@@ -460,7 +461,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h3 id="_fehlermeldungen"><a class="anchor" href="#_fehlermeldungen"></a>1.1. Fehlermeldungen</h3>
 <div class="imageblock">
 <div class="content">
-<img src="image-2022-02-20-22-24-56-250.png" alt="image 2022 02 20 22 24 56 250">
+<img src="../images/image-2022-02-20-22-24-56-250.png" alt="image 2022 02 20 22 24 56 250">
 </div>
 <div class="title">Figure 1. ERD</div>
 </div>
@@ -598,12 +599,56 @@ Die Reihenfolge ist nicht wichtig so lang zum schluss ein Order by kommt
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_wawi"><a class="anchor" href="#_wawi"></a>1.2. WAWI</h3>
+<div class="imageblock">
+<div class="content">
+<img src="../images/image-2022-02-21-14-47-49-500.png" alt="image 2022 02 21 14 47 49 500">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="p">(</span>
+   <span class="k">select</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">status</span><span class="p">,</span>
+   <span class="mi">1</span> <span class="k">as</span> <span class="n">einrueck</span><span class="p">,</span>
+   <span class="s1">'WAWI'</span> <span class="k">as</span> <span class="n">title</span><span class="p">,</span>
+   <span class="k">null</span> <span class="k">as</span> <span class="n">icon</span><span class="p">,</span>
+   <span class="mi">0</span> <span class="k">as</span> <span class="n">value</span><span class="p">,</span>
+   <span class="k">null</span> <span class="k">as</span> <span class="n">tooltip</span><span class="p">,</span>
+   <span class="k">null</span> <span class="k">as</span> <span class="n">link</span> <span class="k">from</span> <span class="n">dual</span>
+
+<span class="k">union</span>
+
+<span class="k">select</span> <span class="o">-</span><span class="mi">1</span> <span class="k">as</span> <span class="n">status</span><span class="p">,</span>
+    <span class="mi">2</span> <span class="k">as</span> <span class="n">einrueck</span><span class="p">,</span>
+    <span class="p">(</span><span class="k">select</span> <span class="n">k</span><span class="p">.</span><span class="n">vname</span> <span class="k">from</span> <span class="n">WAWI_KUNDE</span> <span class="n">k</span> <span class="k">where</span> <span class="n">k</span><span class="p">.</span><span class="n">kundenid</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">kundenid</span><span class="p">),</span>
+    <span class="k">null</span> <span class="k">as</span> <span class="n">icon</span><span class="p">,</span>
+    <span class="n">r</span><span class="p">.</span><span class="n">rechnungskopfid</span> <span class="k">as</span> <span class="n">value</span><span class="p">,</span>
+    <span class="k">null</span> <span class="k">as</span> <span class="n">tooltip</span><span class="p">,</span>
+    <span class="k">null</span> <span class="k">as</span> <span class="n">link</span>
+    <span class="k">from</span> <span class="n">WAWI_RECHNUNGSKOPF</span> <span class="n">r</span>
+
+<span class="k">union</span>
+
+<span class="k">select</span> <span class="mi">0</span> <span class="k">as</span> <span class="n">status</span><span class="p">,</span>
+   <span class="mi">3</span> <span class="k">as</span> <span class="n">einrueck</span><span class="p">,</span>
+   <span class="p">(</span><span class="k">Select</span> <span class="n">a</span><span class="p">.</span><span class="n">bezeichnung</span> <span class="k">from</span> <span class="n">WAWI_ARTIKEL</span> <span class="n">a</span> <span class="k">where</span> <span class="n">a</span><span class="p">.</span><span class="n">Artikelid</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">artikelid</span><span class="p">),</span>
+   <span class="k">null</span> <span class="k">as</span> <span class="n">icon</span><span class="p">,</span>
+   <span class="n">rechnungskopfid</span> <span class="k">as</span> <span class="n">value</span><span class="p">,</span>
+   <span class="k">null</span> <span class="k">as</span> <span class="n">tooltip</span><span class="p">,</span>
+   <span class="k">null</span> <span class="k">as</span> <span class="n">link</span>
+<span class="k">from</span> <span class="n">WAWI_RECHNUNGSPOSITION</span> <span class="n">r</span>
+
+<span class="p">)</span> <span class="k">order</span> <span class="k">by</span> <span class="n">value</span><span class="p">,</span> <span class="n">einrueck</span></code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-02-20 23:20:20 UTC
+Last updated 2022-02-21 18:27:58 UTC
 </div>
 </div>
 <style>
