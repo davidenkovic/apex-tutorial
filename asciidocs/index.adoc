@@ -5,7 +5,7 @@
 === Fehlermeldungen
 
 .ERD
-image::image-2022-02-20-22-24-56-250.png[]
+image::../images/image-2022-02-20-22-24-56-250.png[]
 
 .SQL Code
 [source, sql]
@@ -124,3 +124,43 @@ from fehlermeldung
 ----
 
 IMPORTANT: Die Reihenfolge ist nicht wichtig so lang zum schluss ein Order by kommt
+
+=== WAWI
+
+image::../images/image-2022-02-21-14-47-49-500.png[]
+
+[source,sql]
+----
+select * from (
+   select 1 as status,
+   1 as einrueck,
+   'WAWI' as title,
+   null as icon,
+   0 as value,
+   null as tooltip,
+   null as link from dual
+
+union
+
+select -1 as status,
+    2 as einrueck,
+    (select k.vname from WAWI_KUNDE k where k.kundenid = r.kundenid),
+    null as icon,
+    r.rechnungskopfid as value,
+    null as tooltip,
+    null as link
+    from WAWI_RECHNUNGSKOPF r
+
+union
+
+select 0 as status,
+   3 as einrueck,
+   (Select a.bezeichnung from WAWI_ARTIKEL a where a.Artikelid = r.artikelid),
+   null as icon,
+   rechnungskopfid as value,
+   null as tooltip,
+   null as link
+from WAWI_RECHNUNGSPOSITION r
+
+) order by value, einrueck
+----
